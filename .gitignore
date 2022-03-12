@@ -49,7 +49,7 @@ tmp/
 .classpath
 .project
 *.tmp
-*.bak
+#*.bak
 *.swp
 *~.nib
 local.properties
