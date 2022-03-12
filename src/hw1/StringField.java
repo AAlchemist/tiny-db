@@ -1,6 +1,7 @@
 package hw1;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Instance of Field that stores a single String of a fixed length.

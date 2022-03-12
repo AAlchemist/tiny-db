@@ -1,6 +1,7 @@
 package hw1;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -23,7 +24,7 @@ public class IntField implements Field {
     }
     
     public IntField(byte[] b) {
-    	value = java.nio.ByteBuffer.wrap(b).getInt();
+    	value = ByteBuffer.wrap(b).getInt();
     }
 
     public String toString() {

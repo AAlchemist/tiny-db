@@ -1,6 +1,7 @@
 package hw1;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Interface for values of fields in tuples in SimpleDB.

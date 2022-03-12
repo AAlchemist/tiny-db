@@ -1,3 +1,8 @@
+/*
+* @author Chengjiang Xia
+* @author Jushen Wang
+*/
+
 package hw1;
 
 import java.io.BufferedReader;
@@ -15,13 +20,35 @@ import java.util.*;
  */
 
 public class Catalog {
-	
+
+    // v1: {name: tableInfo}
+    Map<String, TableInfo> tableByName;
+    Map<Integer, TableInfo> tableById;
+
     /**
      * Constructor.
      * Creates a new, empty catalog.
      */
     public Catalog() {
-    	//your code here
+    	//your code here (v1)
+        tableByName = new HashMap<>();
+        tableById = new HashMap<>();
+    }
+
+    public Map<String, TableInfo> getTableByName() {
+        return tableByName;
+    }
+
+    public void setTableByName(Map<String, TableInfo> tableByName) {
+        this.tableByName = tableByName;
+    }
+
+    public Map<Integer, TableInfo> getTableById() {
+        return tableById;
+    }
+
+    public void setTableById(Map<Integer, TableInfo> tableById) {
+        this.tableById = tableById;
     }
 
     /**
@@ -33,7 +60,11 @@ public class Catalog {
      * @param pkeyField the name of the primary key field
      */
     public void addTable(HeapFile file, String name, String pkeyField) {
-    	//your code here
+    	//your code here (v1)
+        TableInfo tableInfo = new TableInfo(name, pkeyField, file);
+        tableByName.put(name, tableInfo);
+        // Be used in getDbFile(int tableid)
+        tableById.put(file.getId(), tableInfo);
     }
 
     public void addTable(HeapFile file, String name) {
@@ -44,9 +75,20 @@ public class Catalog {
      * Return the id of the table with a specified name,
      * @throws NoSuchElementException if the table doesn't exist
      */
-    public int getTableId(String name) {
-    	//your code here
-    	return 0;
+    public int getTableId(String name) throws NoSuchElementException {
+    	//your code here (v1)
+        if (!tableByName.containsKey(name)) {
+            throw new NoSuchElementException("No such table name");
+        }
+        return tableByName.get(name).getFile().getId();
+    }
+
+    // v1: Reduce duplicated code
+    private TableInfo getTableInfo(int tableId) throws NoSuchElementException {
+        if (!tableById.containsKey(tableId)) {
+            throw new NoSuchElementException("No such table id");
+        }
+        return tableById.get(tableId);
     }
 
     /**
@@ -55,8 +97,8 @@ public class Catalog {
      *     function passed to addTable
      */
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
-    	//your code here
-    	return null;
+    	//your code here (v1)
+        return getDbFile(tableid).getTupleDesc();
     }
 
     /**
@@ -66,28 +108,30 @@ public class Catalog {
      *     function passed to addTable
      */
     public HeapFile getDbFile(int tableid) throws NoSuchElementException {
-    	//your code here
-    	return null;
+    	//your code here (v1)
+        return getTableInfo(tableid).getFile();
     }
 
     /** Delete all tables from the catalog */
     public void clear() {
-    	//your code here
+    	//your code here (v1)
+        tableByName = new HashMap<>();
+        tableById = new HashMap<>();
     }
 
-    public String getPrimaryKey(int tableid) {
-    	//your code here
-    	return null;
+    public String getPrimaryKey(int tableid) throws NoSuchElementException {
+    	//your code here (v1)
+    	return getTableInfo(tableid).getPkeyField();
     }
 
     public Iterator<Integer> tableIdIterator() {
-    	//your code here
-    	return null;
+    	//your code here (v1)
+    	return tableById.keySet().iterator();
     }
 
-    public String getTableName(int id) {
-    	//your code here
-    	return null;
+    public String getTableName(int id) throws NoSuchElementException {
+    	//your code here (v1)
+    	return getTableInfo(id).getName();
     }
     
     /**
@@ -141,6 +185,43 @@ public class Catalog {
         } catch (IndexOutOfBoundsException e) {
             System.out.println ("Invalid catalog entry : " + line);
             System.exit(0);
+        }
+    }
+
+    // v1: Create a inner class to hold relevant information for a table
+    private class TableInfo {
+        private String name;
+        private String pkeyField;
+        private HeapFile file;
+
+        public TableInfo(String name, String pkeyField, HeapFile file) {
+            this.name = name;
+            this.pkeyField = pkeyField;
+            this.file = file;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getPkeyField() {
+            return pkeyField;
+        }
+
+        public void setPkeyField(String pkeyField) {
+            this.pkeyField = pkeyField;
+        }
+
+        public HeapFile getFile() {
+            return file;
+        }
+
+        public void setFile(HeapFile file) {
+            this.file = file;
         }
     }
 }
