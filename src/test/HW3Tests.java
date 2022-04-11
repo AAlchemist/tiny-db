@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Test;
 
@@ -131,6 +132,7 @@ public class HW3Tests {
 		assertTrue(err.get(0).getField().equals(new IntField(10)));
 		assertTrue(err.get(1).getField().equals(new IntField(12)));
 	}
+
 
 	@Test
 	public void testSearch() {
@@ -349,7 +351,7 @@ public class HW3Tests {
 		bt.insert(new Entry(new IntField(3), 0));
 		bt.insert(new Entry(new IntField(2), 0));
 		bt.insert(new Entry(new IntField(1), 0));
-	
+
 		bt.delete(new Entry(new IntField(1), 0));
 
 		// Tree should look like:
@@ -381,6 +383,15 @@ public class HW3Tests {
 		assertTrue(rightChild.getEntries().get(1).getField().equals(new IntField(6)));
 
 	}
+
+//	@Test
+//	public void test1() {
+//		List<Integer> list1 = new ArrayList<>(), list2 = new ArrayList<>();
+//		for (int i = 0; i < 10; ++i) list1.add(i);
+//		for (int i = 10; i < 20; ++i) list2.add(i);
+//		list2.addAll(0, list1);
+//		System.out.println(list2);
+//	}
 	
 	@Test
 	public void testInsertCreateNewRoot(){
@@ -565,7 +576,7 @@ public class HW3Tests {
 		//need to be update
 		assertTrue(k.get(0).compare(RelationalOperator.EQ, new IntField(4)));
 
-		//check values
+		//check value
 		ArrayList<Entry> c0entries = c0.getEntries();
 		assertTrue(c0entries.get(0).getField().equals(new IntField(2)));
 		assertTrue(c0entries.get(1).getField().equals(new IntField(4)));
@@ -636,6 +647,7 @@ public class HW3Tests {
 		//                   /   |   \
 		//               [2,4] [7, ] [12, ]
 		bt.delete(new Entry(new IntField(9), 0));
+//		System.out.println(bt);
 		Node root = bt.getRoot();
 		assertTrue(root.isLeafNode() == false);
 		ArrayList<Field> root_keys = ((InnerNode)root).getKeys();
@@ -676,6 +688,7 @@ public class HW3Tests {
 		bt.insert(new Entry(new IntField(6), 0));
 		bt.insert(new Entry(new IntField(1), 0));
 		bt.insert(new Entry(new IntField(3), 0));
+//		System.out.println(bt);
 		//                           [7, ]
 		//                         /       \
 		//                       /           \
@@ -686,6 +699,7 @@ public class HW3Tests {
 		//           [1,2] [3,4] [6,7]     [9, ]    [12, ]
 		//delete 12
 		bt.delete(new Entry(new IntField(12), 0));
+//		System.out.println(bt);
 		//                           [4, ]
 		//                         /       \
 		//                       /           \
@@ -849,6 +863,38 @@ public class HW3Tests {
 		assertTrue(c2Entities.get(1).getField().compare(RelationalOperator.EQ, new IntField(10)));
 		assertTrue(c2Entities.get(2).getField().compare(RelationalOperator.EQ, new IntField(12)));
 
+	}
+
+	/*
+	 * Try four level
+	 * */
+	@Test
+	public void testMoreComplexInsertAndDelete() {
+		BPlusTree bt = new BPlusTree(3, 2);
+		bt.insert(new Entry(new IntField(9), 0));
+		bt.insert(new Entry(new IntField(4), 0));
+		bt.insert(new Entry(new IntField(12), 0));
+		bt.insert(new Entry(new IntField(7), 0));
+		bt.insert(new Entry(new IntField(2), 0));
+		bt.insert(new Entry(new IntField(6), 0));
+		bt.insert(new Entry(new IntField(1), 0));
+		bt.insert(new Entry(new IntField(3), 0));
+		bt.insert(new Entry(new IntField(10), 0));
+		bt.insert(new Entry(new IntField(5), 0));
+		bt.insert(new Entry(new IntField(13), 0));
+		bt.insert(new Entry(new IntField(14), 0));
+		bt.insert(new Entry(new IntField(15), 0));
+		String btStr = "[7 ]\n" +
+				"[4 ][12 ]\n" +
+				"[2 ][6 ][9 ][14 ]\n" +
+				"[1 2 ][3 4 ][5 6 ][7 ][9 ][10 12 ][13 14 ][15 ]\n";
+		assertEquals(btStr, bt.toString());
+		bt.delete(new Entry(new IntField(15), 0));
+		bt.delete(new Entry(new IntField(14), 0));
+		btStr = "[4 7 ]\n" +
+				"[2 ][6 ][9 12 ]\n" +
+				"[1 2 ][3 4 ][5 6 ][7 ][9 ][10 12 ][13 ]\n";
+		assertEquals(btStr, bt.toString());
 	}
 
 }
