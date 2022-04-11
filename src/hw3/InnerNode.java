@@ -316,82 +316,82 @@ public class InnerNode implements Node {
         }
     }
 
-    private void pushThrough() {
-        InnerNode parent = this.parent;
-        if (parent == null) return;
-        int i;
-        for (i = 0; i < parent.getChildren().size(); ++i)
-            if (parent.getChildren().get(i).equals(this)) break;
-        Node borrowChild = null;
-        if (i > 0) {
-            InnerNode leftSibling = ((InnerNode) parent.getChildren().get(i - 1));
-            if (leftSibling.getChildren().size() > leftSibling.getDegree() / 2 + leftSibling.getDegree() % 2) {
-                borrowChild = leftSibling.getChildren().remove(leftSibling.getChildren().size() - 1);
-                this.getChildren().add(0,borrowChild);
-                parent.updateKeys();
-                this.updateKeys();
-
-                leftSibling.updateKeys();
-            }
-        }
-        else if (i < parent.getChildren().size() - 1) {
-            InnerNode rightSibling = ((InnerNode) parent.getChildren().get(i + 1));
-            if (rightSibling.getChildren().size() > rightSibling.getDegree() / 2 + rightSibling.getDegree() % 2) {
-                borrowChild = rightSibling.getChildren().remove(0);
-                this.getChildren().add(borrowChild);
-                parent.updateKeys();
-                this.updateKeys();
-
-                rightSibling.updateKeys();
-            }
-        }
-        if (borrowChild == null) {
-            // can't push through, try to merge to the left sibling
-            if (i > 0) {
-                InnerNode leftSibling = (InnerNode) this.parent.getChildren().get(i - 1);
-                for (int j = 0; j < leftSibling.getChildren().size(); ++j) {
-                    if (leftSibling.getChildren().get(j).isLeafNode())
-                        ((LeafNode) leftSibling.getChildren().get(j)).setParent(this);
-                    else
-                        ((InnerNode) leftSibling.getChildren().get(j)).setParent(this);
-                }
-                this.getChildren().addAll(0, leftSibling.getChildren());
-
-                this.parent.getChildren().remove(leftSibling);
-                this.updateKeys();
-                if (this.getParent().getChildren().size() == this.getParent().getKeys().size()) {
-                    if (this.getParent().getParent() == null) this.setParent(null);
-                    else this.getParent().pushThrough();
-                }
-            } else if (i < this.parent.getChildren().size() - 1) {
-                InnerNode rightSibling = (InnerNode) this.parent.getChildren().get(i + 1);
-                for (int j = 0; j < rightSibling.getChildren().size(); ++j) {
-                    if (rightSibling.getChildren().get(j).isLeafNode())
-                        ((LeafNode) rightSibling.getChildren().get(j)).setParent(this);
-                    else
-                        ((InnerNode) rightSibling.getChildren().get(j)).setParent(this);
-                }
-                this.getChildren().addAll(rightSibling.getChildren());
-
-                this.parent.getChildren().remove(rightSibling);
-                this.updateKeys();
-                if (this.getParent().getChildren().size() == this.getParent().getKeys().size()) {
-                    if (this.getParent().getParent() == null) this.setParent(null);
-                    else this.getParent().pushThrough();
-                }
-            }
-//            this.parent = null;
-        }
-
-    }
-
-
-
-    private void removeLevel() {
-        // children of this and siblings
-        ArrayList<Node> children = new ArrayList<>();
-
-    }
+//    private void pushThrough() {
+//        InnerNode parent = this.parent;
+//        if (parent == null) return;
+//        int i;
+//        for (i = 0; i < parent.getChildren().size(); ++i)
+//            if (parent.getChildren().get(i).equals(this)) break;
+//        Node borrowChild = null;
+//        if (i > 0) {
+//            InnerNode leftSibling = ((InnerNode) parent.getChildren().get(i - 1));
+//            if (leftSibling.getChildren().size() > leftSibling.getDegree() / 2 + leftSibling.getDegree() % 2) {
+//                borrowChild = leftSibling.getChildren().remove(leftSibling.getChildren().size() - 1);
+//                this.getChildren().add(0,borrowChild);
+//                parent.updateKeys();
+//                this.updateKeys();
+//
+//                leftSibling.updateKeys();
+//            }
+//        }
+//        else if (i < parent.getChildren().size() - 1) {
+//            InnerNode rightSibling = ((InnerNode) parent.getChildren().get(i + 1));
+//            if (rightSibling.getChildren().size() > rightSibling.getDegree() / 2 + rightSibling.getDegree() % 2) {
+//                borrowChild = rightSibling.getChildren().remove(0);
+//                this.getChildren().add(borrowChild);
+//                parent.updateKeys();
+//                this.updateKeys();
+//
+//                rightSibling.updateKeys();
+//            }
+//        }
+//        if (borrowChild == null) {
+//            // can't push through, try to merge to the left sibling
+//            if (i > 0) {
+//                InnerNode leftSibling = (InnerNode) this.parent.getChildren().get(i - 1);
+//                for (int j = 0; j < leftSibling.getChildren().size(); ++j) {
+//                    if (leftSibling.getChildren().get(j).isLeafNode())
+//                        ((LeafNode) leftSibling.getChildren().get(j)).setParent(this);
+//                    else
+//                        ((InnerNode) leftSibling.getChildren().get(j)).setParent(this);
+//                }
+//                this.getChildren().addAll(0, leftSibling.getChildren());
+//
+//                this.parent.getChildren().remove(leftSibling);
+//                this.updateKeys();
+//                if (this.getParent().getChildren().size() == this.getParent().getKeys().size()) {
+//                    if (this.getParent().getParent() == null) this.setParent(null);
+//                    else this.getParent().pushThrough();
+//                }
+//            } else if (i < this.parent.getChildren().size() - 1) {
+//                InnerNode rightSibling = (InnerNode) this.parent.getChildren().get(i + 1);
+//                for (int j = 0; j < rightSibling.getChildren().size(); ++j) {
+//                    if (rightSibling.getChildren().get(j).isLeafNode())
+//                        ((LeafNode) rightSibling.getChildren().get(j)).setParent(this);
+//                    else
+//                        ((InnerNode) rightSibling.getChildren().get(j)).setParent(this);
+//                }
+//                this.getChildren().addAll(rightSibling.getChildren());
+//
+//                this.parent.getChildren().remove(rightSibling);
+//                this.updateKeys();
+//                if (this.getParent().getChildren().size() == this.getParent().getKeys().size()) {
+//                    if (this.getParent().getParent() == null) this.setParent(null);
+//                    else this.getParent().pushThrough();
+//                }
+//            }
+////            this.parent = null;
+//        }
+//
+//    }
+//
+//
+//
+//    private void removeLevel() {
+//        // children of this and siblings
+//        ArrayList<Node> children = new ArrayList<>();
+//
+//    }
 
     public void setParent(InnerNode parent) {
         this.parent = parent;
