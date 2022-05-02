@@ -52,6 +52,7 @@ public class HW3Tests {
 		bt.insert(new Entry(new IntField(1), 0));
 		bt.insert(new Entry(new IntField(3), 0));
 		bt.insert(new Entry(new IntField(10), 0));
+		System.out.println(bt);
 
 		//verify root properties
 		Node root = bt.getRoot();
