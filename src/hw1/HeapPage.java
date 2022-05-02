@@ -142,8 +142,10 @@ public class HeapPage {
         //your code here (v1)
         if (!t.getDesc().equals(td))
             throw new Exception("The given tuple does not have the same structure as the tuples within the page.");
-        if (t.getPid() != id)
+        if (t.getPid() != id) {
+            System.out.println(t.getPid() + " " + id);
             throw new Exception("The page id from the tuple does not match this page.");
+        }
         // Find the tuple by id (instead of looping through)
         if (!slotOccupied(t.getId()))
             throw new Exception("The tuple slot is already empty.");

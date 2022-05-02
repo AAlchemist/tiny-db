@@ -112,5 +112,11 @@ public class Tuple {
         sb.append("]\n");
         return sb.toString();
     }
+
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (!(obj instanceof Tuple)) return false;
+//        Tuple other = (Tuple) obj;
+//        return other.toString().equals(this.toString());
+//    }
 }
-	
